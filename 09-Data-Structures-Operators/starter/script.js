@@ -26,4 +26,77 @@ const restaurant = {
       close: 24,
     },
   },
+
+  orderDelivery: function ({starterIndex = 1, mainIndex = 0, time = '20:00', address}) {
+    // console.log(`Order received! ${this.starterMenu[starterIndex]} and ${this.mainMenu[mainIndex]} will be delivered to ${address} at ${time}`);
+  },
+
+  orderPasta: function(ing1, ing2, ing3) {
+    // console.log(`Here is your delicious pasta with ${ing1}, ${ing2} and ${ing3}`);
+  }
 };
+
+restaurant.orderDelivery({
+  time: '22:30',
+  address: 'Dlouhá 3',
+  mainIndex: 2,
+  starterIndex: 2
+})
+
+const {name, openingHours, categories} = restaurant;
+// console.log(name, openingHours, categories);
+
+const {name: restaurantName, openingHours: hours, categories: tags} = restaurant;
+// console.log(restaurantName, hours, tags);
+
+// Default values
+const { menu = [], starterMenu: starters = []} = restaurant;
+//console.log(menu, starters);
+
+// Mutating variables
+let a = 111;
+let b = 999;
+const obj = {a: 23, b: 7, c: 14};
+({a, b} = obj);
+// console.log(a, b);
+
+// Nested object
+const {fri: {open: o, close: c}} = openingHours;
+// console.log(o, c);
+
+// Spread operator
+const newMenu = [...restaurant.mainMenu, 'Gnocci'];
+// console.log(newMenu);
+
+// Copy array - create shallow copy
+const mainMenuCopy = [...restaurant.mainMenu];
+
+// Join 2 arrays
+const wholeMenu = [...restaurant.starterMenu, ...restaurant.mainMenu];
+//console.log(wholeMenu);
+
+// Iterables: arrays, strings, maps, sets. NOT objects
+const str = 'Lucia';
+// console.log(...str);
+const letters = [...str, ' ', 'S.'];
+// console.log(letters);
+
+/* const ingredients = [
+  prompt('Lets\'s make pasta! Ingredient 1?'), 
+  prompt('Ingredient 2?'),
+  prompt('Ingredient 3?')
+]
+restaurant.orderPasta(...ingredients); */
+
+// Real world scenario
+// Objects
+const newRestaurant = { foundedIn: 1998, ...restaurant, founder: 'Guiseppe'}
+
+// console.log(newRestaurant);
+
+const restaurantCopy = {...restaurant};
+restaurantCopy.name = 'Ristorante Roma';
+console.log(restaurantCopy.name);
+console.log(restaurant.name);
+
+
