@@ -5,28 +5,16 @@ import { Fraction } from 'fractional';
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
-
-  renderSpinner() {
-    const markup = `
-    <div class="spinner">
-      <svg>
-        <use href="${icons}#icon-loader"></use>
-      </svg>
-    </div>
-  `;
-    this.#parentElement.innerHTML = '';
-    this.#parentElement.insertAdjacentHTML('beforeend', markup);
-  }
-
-  render(data) {
-    this.#data = data;
-    const markup = this.#generateMarkup();
-    this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
+  #errorMessage = 'We could not find that recipe. Please, try another one!';
+  #message = ''; //for success
 
   #clear() {
     this.#parentElement.innerHTML = '';
+  }
+
+  #insertHTML(markup) {
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
   #generateMarkup() {
@@ -131,6 +119,58 @@ class RecipeView {
       </div>
     </li>
     `;
+  }
+
+  renderSpinner() {
+    const markup = `
+    <div class="spinner">
+      <svg>
+        <use href="${icons}#icon-loader"></use>
+      </svg>
+    </div>
+  `;
+    this.#insertHTML(markup);
+  }
+
+  renderError(message = this.#errorMessage) {
+    const markup = `
+      <div class="error">
+        <div>
+          <svg>
+            <use href="${icons}#icon-alert-triangle"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div> 
+    `;
+    this.#insertHTML(markup);
+  }
+
+  renderMessage(message = this.#message) {
+    const markup = `
+      <div class="message">
+        <div>
+          <svg>
+            <use href="${icons}#icon-smile"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+    this.#insertHTML(markup);
+  }
+
+  render(data) {
+    this.#data = data;
+    const markup = this.#generateMarkup();
+    this.#insertHTML(markup);
+  }
+
+  // Publisher-Subscriber pattern
+  addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+    // window.addEventListener('hashchange', handler);
+    // window.addEventListener('load', handler);
   }
 }
 
