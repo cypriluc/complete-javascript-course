@@ -21,6 +21,35 @@ export default class View {
     this._insertHTML(markup);
   }
 
+  update(data) {
+    this._data = data;
+    const newMarkup = this._generateMarkup();
+
+    // convert string to real DOM node objects - virtual DOM living in the memory
+    const newDOM = document.createRange().createContextualFragment(newMarkup);
+    const newElements = Array.from(newDOM.querySelectorAll('*')); // convert Nodelist to array
+    const curElements = Array.from(this._parentElement.querySelectorAll('*')); // convert Nodelist to array
+
+    newElements.forEach((newEl, i) => {
+      const curEl = curElements[i];
+
+      // Updates changed TEXT  // executed only on elements containing text directly
+      if (
+        !newEl.isEqualNode(curEl) &&
+        newEl.firstChild?.nodeValue.trim() !== ''
+      ) {
+        curEl.textContent = newEl.textContent;
+      }
+
+      // Update changed ATTRIBUTES
+      if (!newEl.isEqualNode(curEl)) {
+        Array.from(newEl.attributes).forEach(attr =>
+          curEl.setAttribute(attr.name, attr.value)
+        );
+      }
+    });
+  }
+
   renderSpinner() {
     const markup = `
     <div class="spinner">
