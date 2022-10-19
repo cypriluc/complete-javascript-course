@@ -104,14 +104,41 @@ export const deleteBookmark = function (id) {
   persistBookmarks();
 };
 
+// for development only
+const clearBookmarks = function () {
+  localStorage.clear('bookmarks');
+};
+// clearBookmarks
+
+// upload recipes
+export const uploadRecipe = async function (newRecipe) {
+  try {
+    const ingredients = Object.entries(newRecipe) // convert an object into array of arrays {key1: value1, key2: value2} => [[key1, value1], [key2, value2]]
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '') // remove arrays that are not ingredients
+      .map(ing => {
+        const ingArr = ing[1].replaceAll(' ', '').split(','); // create an array in a form of [quantity, unit, description]
+
+        if (ingArr.length !== 3)
+          throw new Error(
+            'Wrong ingredient format! Please use the correct format :)'
+          ); // test if array is valid - if not the function will immediately exit
+
+        const [quantity, unit, description] = ingArr; // destructure ingredients array
+
+        return { quantity: quantity ? +quantity : null, unit, description }; // convert quantity to number or null, otherwise ES6 syntax - if 'unit: unit ' use only 'unit'... ==> map each ingredient into this object
+      });
+
+    console.log(ingredients);
+  } catch (err) {
+    throw err;
+  }
+
+  const recipe = {};
+};
+
 const init = function () {
   const storage = localStorage.getItem('bookmarks');
   if (storage) state.bookmarks = JSON.parse(storage);
 };
 
 init();
-
-// for development only
-const clearBookmarks = function () {
-  localStorage.clear('bookmarks');
-};
