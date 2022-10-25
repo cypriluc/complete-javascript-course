@@ -109,6 +109,15 @@ const controlAddRecipe = async function (newRecipe) {
     // success message
     addRecipeView.renderMessage();
 
+    // render bookmark view
+    bookmarksView.render(model.state.bookmarks);
+
+    // change ID in URL
+    // history API of browser - call pushState method to change URL without page reload
+    window.history.pushState(null, '', `#${model.state.recipe.id}`); // 3 arguments: state, title, url
+
+    // window.history.back() // going back
+
     // close form window
     setTimeout(function () {
       addRecipeView.toggleWindow();
